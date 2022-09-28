@@ -17,7 +17,7 @@ except:
 
 P1_amount = 12
 P2_amount = 12
-P3_amount = 12
+P3_amount = 11
 
 P1 = []
 P2 = []
