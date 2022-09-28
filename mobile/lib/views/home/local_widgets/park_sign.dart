@@ -62,8 +62,8 @@ class ParkSign extends StatelessWidget {
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                        Colors.black.withOpacity(0.0),
-                        Colors.black.withOpacity(0.5),
+                        M3Color.of(context).onBackground.withOpacity(0.0),
+                        M3Color.of(context).onBackground.withOpacity(0.5),
                       ],
                     ),
                   ),

@@ -1,7 +1,7 @@
 abstract class BaseFirestoreModel {
   // ISO format
-  final String createdAt;
-  final String updatedAt;
+  final String? createdAt;
+  final String? updatedAt;
   final String id;
 
   BaseFirestoreModel(

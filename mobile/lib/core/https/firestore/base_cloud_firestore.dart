@@ -39,6 +39,14 @@ abstract class BaseCloudFirestore<T extends BaseFirestoreModel> {
     });
   }
 
+  Stream<T?> streamOne(String id) {
+    return collectionRef.doc(id).snapshots().map((snapshot) {
+      final element = snapshot.data();
+      if (element == null) return null;
+      return toObjectAsync(element);
+    });
+  }
+
   Future<FirestoreListModel<T>?> fetchAll({
     String? nextPageKey,
     String? orderBy,

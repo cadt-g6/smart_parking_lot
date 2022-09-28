@@ -13,8 +13,8 @@ class UserFirestoreModel extends BaseFirestoreModel {
     required this.dob,
     required this.login,
     required this.profileUrl,
-    required String createdAt,
-    required String updatedAt,
+    required String? createdAt,
+    required String? updatedAt,
     required String id,
   }) : super(createdAt, updatedAt, id);
 

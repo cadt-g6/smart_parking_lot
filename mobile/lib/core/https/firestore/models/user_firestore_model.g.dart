@@ -7,7 +7,7 @@ part of 'user_firestore_model.dart';
 // **************************************************************************
 
 abstract class _$UserFirestoreModelCWProxy {
-  UserFirestoreModel createdAt(String createdAt);
+  UserFirestoreModel createdAt(String? createdAt);
 
   UserFirestoreModel dob(String? dob);
 
@@ -21,7 +21,7 @@ abstract class _$UserFirestoreModelCWProxy {
 
   UserFirestoreModel profileUrl(String? profileUrl);
 
-  UserFirestoreModel updatedAt(String updatedAt);
+  UserFirestoreModel updatedAt(String? updatedAt);
 
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `UserFirestoreModel(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
@@ -48,7 +48,7 @@ class _$UserFirestoreModelCWProxyImpl implements _$UserFirestoreModelCWProxy {
   const _$UserFirestoreModelCWProxyImpl(this._value);
 
   @override
-  UserFirestoreModel createdAt(String createdAt) => this(createdAt: createdAt);
+  UserFirestoreModel createdAt(String? createdAt) => this(createdAt: createdAt);
 
   @override
   UserFirestoreModel dob(String? dob) => this(dob: dob);
@@ -70,7 +70,7 @@ class _$UserFirestoreModelCWProxyImpl implements _$UserFirestoreModelCWProxy {
       this(profileUrl: profileUrl);
 
   @override
-  UserFirestoreModel updatedAt(String updatedAt) => this(updatedAt: updatedAt);
+  UserFirestoreModel updatedAt(String? updatedAt) => this(updatedAt: updatedAt);
 
   @override
 
@@ -91,10 +91,10 @@ class _$UserFirestoreModelCWProxyImpl implements _$UserFirestoreModelCWProxy {
     Object? updatedAt = const $CopyWithPlaceholder(),
   }) {
     return UserFirestoreModel(
-      createdAt: createdAt == const $CopyWithPlaceholder() || createdAt == null
+      createdAt: createdAt == const $CopyWithPlaceholder()
           ? _value.createdAt
           // ignore: cast_nullable_to_non_nullable
-          : createdAt as String,
+          : createdAt as String?,
       dob: dob == const $CopyWithPlaceholder()
           ? _value.dob
           // ignore: cast_nullable_to_non_nullable
@@ -119,10 +119,10 @@ class _$UserFirestoreModelCWProxyImpl implements _$UserFirestoreModelCWProxy {
           ? _value.profileUrl
           // ignore: cast_nullable_to_non_nullable
           : profileUrl as String?,
-      updatedAt: updatedAt == const $CopyWithPlaceholder() || updatedAt == null
+      updatedAt: updatedAt == const $CopyWithPlaceholder()
           ? _value.updatedAt
           // ignore: cast_nullable_to_non_nullable
-          : updatedAt as String,
+          : updatedAt as String?,
     );
   }
 }
@@ -146,8 +146,8 @@ UserFirestoreModel _$UserFirestoreModelFromJson(Map<String, dynamic> json) =>
       login:
           (json['login'] as List<dynamic>?)?.map((e) => e as String).toList(),
       profileUrl: json['profile_url'] as String?,
-      createdAt: json['created_at'] as String,
-      updatedAt: json['updated_at'] as String,
+      createdAt: json['created_at'] as String?,
+      updatedAt: json['updated_at'] as String?,
       id: json['id'] as String,
     );
 
