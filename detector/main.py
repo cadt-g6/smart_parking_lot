@@ -2,22 +2,26 @@ import pickle
 import cvzone
 import cv2
 import numpy as np
+from lib.firebaseConfig import initializeFirebase
+initializeFirebase()
 
 # Video feed
-cap = cv2.VideoCapture('carPark.mp4')
+# cap = cv2.VideoCapture('carPark.mp4')
+# cap = cv2.imread('carParkImg.jpeg')
 
 # Open with Webcam
-# cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(0)
 
 with open('CarParkPos', 'rb') as f:
     posList = pickle.load(f)
 
-width, height = 107, 48
+width, height = 115, 90
 
 
 def checkParkingSpace(imgPro):
     spaceCounter = 0
-
+    free = []
+    notfree = []
     for pos in posList:
         x, y = pos
 
@@ -25,28 +29,38 @@ def checkParkingSpace(imgPro):
         # cv2.imshow(str(x * y), imgCrop)
         count = cv2.countNonZero(imgCrop)
 
-        if count < 900:
+        if count < 900:  #if parking space available
+            print("Park", x, y)
             color = (0, 255, 0)
             thickness = 5
             spaceCounter += 1
-        else:
+            free.append((x,y))
+        else: # if parking space not available
+            print("parking",x, y)
             color = (0, 0, 255)
             thickness = 2
+            notfree.append((x, y))
 
         cv2.rectangle(img, pos, (pos[0] + width,
                       pos[1] + height), color, thickness)
-        cvzone.putTextRect(img, str(count), (x, y + height - 3), scale=1,
-                           thickness=2, offset=0, colorR=color)
+        # cvzone.putTextRect(img, str(count), (x, y + height - 3), scale=1,
+        #                    thickness=2, offset=0, colorR=color)
 
-    cvzone.putTextRect(img, f'Free: {spaceCounter}/{len(posList)}', (100, 50), scale=3,
-                       thickness=5, offset=20, colorR=(0, 200, 0))
+    cvzone.putTextRect(img, f'Free: {spaceCounter}/{len(posList)}', (50, 50), scale=3,
+                       thickness=3, offset=20, colorR=(0, 200, 0))
+    print("free" , free)
+    print("notfree" , notfree)
+    print(" ------------------------- ")
 
 
 while True:
 
-    if cap.get(cv2.CAP_PROP_POS_FRAMES) == cap.get(cv2.CAP_PROP_FRAME_COUNT):
-        cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
-    success, img = cap.read()
+    # if cap.get(cv2.CAP_PROP_POS_FRAMES) == cap.get(cv2.CAP_PROP_FRAME_COUNT):
+    #     cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
+    # success, img = cap.read()
+    img = cv2.imread('parkinglot2.jpeg')
+
+    img = cv2.resize(img,(1190,842))
     imgGray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     imgBlur = cv2.GaussianBlur(imgGray, (3, 3), 1)
     imgThreshold = cv2.adaptiveThreshold(imgBlur, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
