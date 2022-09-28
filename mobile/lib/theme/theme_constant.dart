@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ThemeConstant {
-  static const Color seedColor = Colors.blueAccent;
+  static const Color seedColor = Color(0xFF6A1554);
   static const String defaultFontFamily = 'Quicksand';
 
   static const TextTheme defaultTextTheme = TextTheme(

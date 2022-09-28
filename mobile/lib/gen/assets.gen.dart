@@ -15,6 +15,9 @@ class $AssetsLogoGen {
   /// File path: assets/logo/appstore.png
   AssetGenImage get appstore => const AssetGenImage('assets/logo/appstore.png');
 
+  /// File path: assets/logo/logo.png
+  AssetGenImage get logo => const AssetGenImage('assets/logo/logo.png');
+
   /// File path: assets/logo/playstore.png
   AssetGenImage get playstore =>
       const AssetGenImage('assets/logo/playstore.png');
@@ -25,6 +28,15 @@ class $AssetsLotGen {
 
   /// File path: assets/lot/car.png
   AssetGenImage get car => const AssetGenImage('assets/lot/car.png');
+
+  /// File path: assets/lot/car2.png
+  AssetGenImage get car2 => const AssetGenImage('assets/lot/car2.png');
+
+  /// File path: assets/lot/car3.png
+  AssetGenImage get car3 => const AssetGenImage('assets/lot/car3.png');
+
+  /// File path: assets/lot/car4.png
+  AssetGenImage get car4 => const AssetGenImage('assets/lot/car4.png');
 }
 
 class $AssetsTranslationsGen {

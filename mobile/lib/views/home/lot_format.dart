@@ -47,22 +47,6 @@ class LotFormat {
             "P212",
           ],
         ),
-        ParkModel(
-          name: "P3",
-          lots: [
-            "P301",
-            "P303",
-            "P304",
-            "P305",
-            "P306",
-            "P307",
-            "P308",
-            "P309",
-            "P310",
-            "P311",
-            "P312",
-          ],
-        ),
       ];
 
   Map<String, dynamic> get format {

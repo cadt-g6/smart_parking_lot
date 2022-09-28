@@ -29,14 +29,27 @@ class _HomeAdaptive extends StatelessWidget {
   Widget build(BuildContext context) {
     double roadsWidth = (viewModel.data.length + 1) * kToolbarHeight;
     double margin = (viewModel.data.length * 2 + 1) * 16;
-    double parksSize = (MediaQuery.of(context).size.height - 390.0) * getRow(viewModel.data.first) / 16;
-    double width = roadsWidth + margin + parksSize * 3 - 16;
-
+    double parksSize = (MediaQuery.of(context).size.height - 374.0) * getRow(viewModel.data.first) / 16;
+    double width = roadsWidth + margin + parksSize * viewModel.data.length - 16;
     double startWidth = 36;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("CADT"),
+        backgroundColor: M3Color.of(context).background,
+        title: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: "AEON 3",
+                style: Theme.of(context).appBarTheme.titleTextStyle,
+              ),
+              const WidgetSpan(
+                alignment: PlaceholderAlignment.middle,
+                child: Icon(Icons.arrow_drop_down),
+              ),
+            ],
+          ),
+        ),
         actions: [
           Center(
             child: IconButton(
@@ -49,14 +62,15 @@ class _HomeAdaptive extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: NavigationBar(
+        onDestinationSelected: (index) {},
         destinations: const [
           NavigationDestination(
             icon: Icon(Icons.home),
             label: "Home",
           ),
           NavigationDestination(
-            icon: Icon(Icons.settings),
-            label: "Setting",
+            icon: Icon(Icons.payment),
+            label: "Payment",
           ),
         ],
         selectedIndex: 0,
@@ -64,7 +78,7 @@ class _HomeAdaptive extends StatelessWidget {
       body: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         physics: const ClampingScrollPhysics(),
-        padding: const EdgeInsets.symmetric(vertical: 16.0),
+        padding: const EdgeInsets.only(bottom: 16),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -156,46 +170,78 @@ class _HomeAdaptive extends StatelessWidget {
     ParkModel park,
   ) {
     int row = getRow(park);
-    return Container(
-      height: MediaQuery.of(context).size.height,
-      margin: const EdgeInsets.symmetric(vertical: 16),
-      child: AspectRatio(
-        aspectRatio: row / 16,
-        child: LayoutBuilder(builder: (context, contraint) {
-          return GridView.builder(
-            itemCount: 24,
-            physics: const NeverScrollableScrollPhysics(),
-            padding: const EdgeInsets.symmetric(vertical: 4.0),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 4.0,
-              crossAxisSpacing: 4.0,
-              mainAxisExtent: contraint.maxHeight / row - 4,
-            ),
-            itemBuilder: (localContext, index) {
-              bool parked = Random().nextInt(24).isOdd;
-              String lotIndex = (index + 1).toString().padLeft(2, '0');
-              String lotId = park.name + lotIndex;
-              if (!park.lots.contains(lotId)) return const SizedBox.shrink();
-              return Container(
-                padding: const EdgeInsets.all(4.0),
-                decoration: BoxDecoration(
-                  color: parked ? M3Color.of(context).readOnly.surface5 : M3Color.of(context).background,
-                  border: Border.all(color: M3Color.of(context).outline),
-                  borderRadius: ConfigConstant.circlarRadius1,
+    return Stack(
+      children: [
+        Container(
+          height: MediaQuery.of(context).size.height,
+          margin: const EdgeInsets.symmetric(vertical: 16),
+          child: AspectRatio(
+            aspectRatio: row / 16,
+            child: LayoutBuilder(builder: (context, contraint) {
+              return GridView.builder(
+                itemCount: 24,
+                physics: const NeverScrollableScrollPhysics(),
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 4.0,
+                  crossAxisSpacing: 4.0,
+                  mainAxisExtent: contraint.maxHeight / row - 4,
                 ),
-                alignment: Alignment.center,
-                child: parked
-                    ? Transform.rotate(
-                        angle: index.isEven ? math.pi : 0,
-                        child: Image.asset(Assets.lot.car.path),
-                      )
-                    : Text(lotId),
+                itemBuilder: (localContext, index) {
+                  bool parked = Random().nextInt(24).isOdd;
+                  String lotIndex = (index + 1).toString().padLeft(2, '0');
+                  String lotId = park.name + lotIndex;
+                  if (!park.lots.contains(lotId)) return const SizedBox.shrink();
+                  return Container(
+                    padding: const EdgeInsets.all(4.0),
+                    decoration: BoxDecoration(
+                      color: parked ? M3Color.of(context).tertiary.withOpacity(0.1) : M3Color.of(context).background,
+                      border: Border.all(color: M3Color.of(context).outline),
+                      borderRadius: ConfigConstant.circlarRadius1,
+                    ),
+                    alignment: Alignment.center,
+                    child: parked
+                        ? Transform.rotate(
+                            angle: index.isEven ? math.pi : 0,
+                            child: SimpleShadow(
+                              opacity: 0.5,
+                              color: Colors.black,
+                              offset: index.isEven ? const Offset(3, 3) : const Offset(-3, -3),
+                              sigma: 3,
+                              child: Image.asset(
+                                index % 5 == 0
+                                    ? Assets.lot.car4.path
+                                    : (index % 4 == 0
+                                        ? Assets.lot.car3.path
+                                        : (index % 3 == 0 ? Assets.lot.car2.path : Assets.lot.car.path)),
+                              ),
+                            ),
+                          )
+                        : Text(lotId),
+                  );
+                },
               );
-            },
-          );
-        }),
-      ),
+            }),
+          ),
+        ),
+        Positioned(
+          right: 0,
+          top: 0,
+          child: ParkSign(
+            name: park.name,
+            left: false,
+          ),
+        ),
+        // Positioned(
+        //   left: 0,
+        //   bottom: 0,
+        //   child: ParkSign(
+        //     name: park.name,
+        //     left: true,
+        //   ),
+        // )
+      ],
     );
   }
 }
