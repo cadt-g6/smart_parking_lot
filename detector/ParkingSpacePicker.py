@@ -1,6 +1,10 @@
 import cv2
 import pickle
 import json
+from lib.firebaseConfig import initializeFirebase
+from firebase_admin import firestore
+initializeFirebase()
+
  
 width, height = 115, 90
  
@@ -11,17 +15,17 @@ try:
 except:
     posList = []
 
-P1_amount = 4
-P2_amount = 4
-P3_amount = 4
+P1_amount = 12
+P2_amount = 12
+P3_amount = 12
 
 P1 = []
 P2 = []
 P3 = []
 
-P1_label = [{"label":"P101","pos":{}},{"label":"P102","pos":{}},{"label":"P103","pos":{}},{"label":"P110","pos":{}}]
-P2_label = [{"label":"P201","pos":{}},{"label":"P202","pos":{}},{"label":"P203","pos":{}},{"label":"P110","pos":{}}]
-P3_label = [{"label":"P301","pos":{}},{"label":"P302","pos":{}},{"label":"P303","pos":{}},{"label":"P210","pos":{}}]
+P1_label = [{"label":"P101","pos":{}},{"label":"P102","pos":{}},{"label":"P103","pos":{}},{"label":"P104","pos":{}},{"label":"P105","pos":{}},{"label":"P106","pos":{}},{"label":"P107","pos":{}},{"label":"P108","pos":{}},{"label":"P109","pos":{}},{"label":"P110","pos":{}},{"label":"P111","pos":{}},{"label":"P112","pos":{}}]
+P2_label = [{"label":"P201","pos":{}},{"label":"P202","pos":{}},{"label":"P203","pos":{}},{"label":"P204","pos":{}},{"label":"P205","pos":{}},{"label":"P206","pos":{}},{"label":"P207","pos":{}},{"label":"P208","pos":{}},{"label":"P209","pos":{}},{"label":"P210","pos":{}},{"label":"P211","pos":{}},{"label":"P212","pos":{}}]
+P3_label = [{"label":"P301","pos":{}},{"label":"P303","pos":{}},{"label":"P304","pos":{}},{"label":"P305","pos":{}},{"label":"P306","pos":{}},{"label":"P307","pos":{}},{"label":"P308","pos":{}},{"label":"P309","pos":{}},{"label":"P310","pos":{}},{"label":"P311","pos":{}},{"label":"P312","pos":{}}]
 
 
 def getLabelByPosition(x,y):
@@ -122,7 +126,11 @@ while True:
     cv2.setMouseCallback("Image", mouseClick)
     cv2.waitKey(1)
     groupParking()
-    # print(formatParkingToJSON())
+
+    layout = formatParkingToJSON();
+    client = firestore.client();
+    ref = client.collection("layouts").document(str(layout["id"]));
+    ref.set(layout)
 
     with open('ParkLayout.txt','w') as f:
         f.write(json.dumps((P1_label,P2_label,P3_label)))

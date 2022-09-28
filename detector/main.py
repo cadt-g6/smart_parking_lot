@@ -2,6 +2,8 @@ import pickle
 import cvzone
 import cv2
 import numpy as np
+from lib.firebaseConfig import initializeFirebase
+initializeFirebase()
 
 # Video feed
 # cap = cv2.VideoCapture('carPark.mp4')
