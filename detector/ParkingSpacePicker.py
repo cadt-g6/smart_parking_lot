@@ -96,7 +96,7 @@ def groupParking():
 def formatParkingToJSON():
     return {
         "id": 1,
-        "name": "CS04",
+        "name": "CS04 44",
         "data": [
             {
                 "name": "P1",

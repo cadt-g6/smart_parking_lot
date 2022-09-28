@@ -17,7 +17,7 @@ cap = cv2.VideoCapture(0)
 with open('CarParkPos', 'rb') as f:
     posList = pickle.load(f)
 
-width, height = 115, 90
+width, height = 115, 85
 
 
 with open('ParkLayout.txt', 'r') as f:
