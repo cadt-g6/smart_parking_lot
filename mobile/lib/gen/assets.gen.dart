@@ -20,6 +20,13 @@ class $AssetsLogoGen {
       const AssetGenImage('assets/logo/playstore.png');
 }
 
+class $AssetsLotGen {
+  const $AssetsLotGen();
+
+  /// File path: assets/lot/car.png
+  AssetGenImage get car => const AssetGenImage('assets/lot/car.png');
+}
+
 class $AssetsTranslationsGen {
   const $AssetsTranslationsGen();
 
@@ -34,6 +41,7 @@ class Assets {
   Assets._();
 
   static const $AssetsLogoGen logo = $AssetsLogoGen();
+  static const $AssetsLotGen lot = $AssetsLotGen();
   static const $AssetsTranslationsGen translations = $AssetsTranslationsGen();
 }
 

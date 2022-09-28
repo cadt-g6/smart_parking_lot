@@ -59,6 +59,7 @@ flutter:
   assets:
     - assets/translations/
     - assets/logo/
+    - assets/lot/
 
   # https://flutter.dev/assets-and-images/#resolution-aware
   # https://flutter.dev/assets-and-images/#from-packages
