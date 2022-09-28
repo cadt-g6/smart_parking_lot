@@ -24,7 +24,7 @@ def mouseClick(events, x, y, flags, params):
  
  
 while True:
-    img = cv2.imread('carParkImg.png')
+    img = cv2.imread('carParkImg.jpeg')
     for pos in posList:
         cv2.rectangle(img, pos, (pos[0] + width, pos[1] + height), (255, 0, 255), 2)
  
