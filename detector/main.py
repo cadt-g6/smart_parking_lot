@@ -1,8 +1,10 @@
+import json
 import pickle
 import cvzone
 import cv2
 import numpy as np
 from lib.firebaseConfig import initializeFirebase
+from firebase_admin import firestore
 initializeFirebase()
 
 # Video feed
@@ -18,6 +20,14 @@ with open('CarParkPos', 'rb') as f:
 width, height = 115, 90
 
 
+with open('ParkLayout.txt', 'r') as f:
+    labelpos = f.read()
+
+labelpos = json.JSONDecoder().decode(labelpos)
+
+print(labelpos)
+
+
 def checkParkingSpace(imgPro):
     spaceCounter = 0
     free = []
@@ -30,13 +40,13 @@ def checkParkingSpace(imgPro):
         count = cv2.countNonZero(imgCrop)
 
         if count < 900:  #if parking space available
-            print("Park", x, y)
+            # print("Park", x, y)
             color = (0, 255, 0)
             thickness = 5
             spaceCounter += 1
             free.append((x,y))
         else: # if parking space not available
-            print("parking",x, y)
+            # print("parking",x, y)
             color = (0, 0, 255)
             thickness = 2
             notfree.append((x, y))
@@ -48,17 +58,42 @@ def checkParkingSpace(imgPro):
 
     cvzone.putTextRect(img, f'Free: {spaceCounter}/{len(posList)}', (50, 50), scale=3,
                        thickness=3, offset=20, colorR=(0, 200, 0))
-    print("free" , free)
-    print("notfree" , notfree)
-    print(" ------------------------- ")
+    return notfree, free
 
+def checkLabel(notfree, free):
+    notfree_label = []
+    free_label = []
+    for i in notfree:
+        for j in labelpos:
+            if i[0] == j[1] and i[1] == j[2]:
+                # print(i,j[0])
+                notfree_label.append(j[0])
+        # print("-------------")
+    for i in free:
+        for j in labelpos:
+            if i[0] == j[1] and i[1] == j[2]:
+                # print(i, j[0])
+                free_label.append(j[0])
+        # print("-------------")
+
+    return {
+        "id":1,
+        "free":free_label,
+        "not_free":notfree_label
+    }
+
+def streamToServer(notfree,free):
+    layout = checkLabel(notfree,free)
+    client = firestore.client();
+    ref = client.collection("availibility").document(str(layout["id"]));
+    ref.set(layout)
 
 while True:
 
-    # if cap.get(cv2.CAP_PROP_POS_FRAMES) == cap.get(cv2.CAP_PROP_FRAME_COUNT):
-    #     cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
-    # success, img = cap.read()
-    img = cv2.imread('parkinglot2.jpeg')
+    if cap.get(cv2.CAP_PROP_POS_FRAMES) == cap.get(cv2.CAP_PROP_FRAME_COUNT):
+        cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
+    success, img = cap.read()
+    # img = cv2.imread('parkinglot_empty.jpg')
 
     img = cv2.resize(img,(1190,842))
     imgGray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -69,8 +104,9 @@ while True:
     kernel = np.ones((3, 3), np.uint8)
     imgDilate = cv2.dilate(imgMedian, kernel, iterations=1)
 
-    checkParkingSpace(imgDilate)
+    notfree, free = checkParkingSpace(imgDilate)
+    streamToServer(notfree,free)
+
+    # checkLabel(notfree,free)
     cv2.imshow("Image", img)
-    # cv2.imshow("ImageBlur", imgBlur)
-    # cv2.imshow("ImageThres", imgMedian)
     cv2.waitKey(10)
