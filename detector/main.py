@@ -6,6 +6,7 @@ import numpy as np
 from lib.firebaseConfig import initializeFirebase
 from firebase_admin import firestore
 initializeFirebase()
+from multiprocessing import Process
 
 # Video feed
 # cap = cv2.VideoCapture('carPark.mp4')
@@ -105,7 +106,10 @@ while True:
     imgDilate = cv2.dilate(imgMedian, kernel, iterations=1)
 
     notfree, free = checkParkingSpace(imgDilate)
-    streamToServer(notfree,free)
+    # notfree, free = checkParkingSpace(imgDilate)
+    p = Process(target=streamToServer, args=(notfree, free))
+    p.start()
+    # streamToServer(notfree,free)
 
     # checkLabel(notfree,free)
     cv2.imshow("Image", img)
